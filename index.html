@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>gokems • tired wanderer</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=VT323&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Special+Elite&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
+
+        :root {
+            --accent: #9c6644;
+            --accent2: #8a9e8f;
+            --dark: #0a0a0a;
+            --darker: #050505;
+            --text-main: #b8b8b8;
+            --text-heading: #d4c3b2;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            scroll-padding-top: 40px; 
+        }
+
+        body {
+            background: var(--dark);
+            color: var(--text-main);
+            font-family: 'Inter', system-ui, sans-serif;
+            line-height: 1.8;
+            overflow-x: hidden;
+            position: relative;
+            min-height: 100vh;
+        }
+
+        /* * OPTİMİZASYON: Hareket eden devasa gradyanlar yerine 
+         * hafifçe yanıp sönen (flicker) statik bir film katmanı 
+         */
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background: 
+                radial-gradient(circle at 50% 30%, rgba(156,102,68,0.06) 0%, transparent 60%),
+                repeating-linear-gradient(12deg, transparent 0px, rgba(255,240,200,0.015) 2px, transparent 5px);
+            pointer-events: none;
+            z-index: 1;
+            mix-blend-mode: overlay;
+            animation: flicker 4s infinite alternate;
+        }
+
+        @keyframes flicker {
+            0% { opacity: 0.5; }
+            100% { opacity: 0.8; }
+        }
+
+        /* * OPTİMİZASYON: Hareketli çizgiler çok yorar. 
+         * Bunun yerine statik tarama çizgileri bırakıldı. 
+         */
+        body::after {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background: repeating-linear-gradient(
+                to bottom,
+                transparent 0px,
+                transparent 3px,
+                rgba(0,0,0,0.2) 3px,
+                rgba(0,0,0,0.2) 6px
+            );
+            pointer-events: none;
+            z-index: 2;
+        }
+
+        .container {
+            max-width: 960px;
+            margin: 0 auto;
+            padding: 20px;
+            position: relative;
+            z-index: 3;
+        }
+
+        header {
+            text-align: center;
+            padding: 80px 20px 60px;
+            border-bottom: 1px solid rgba(156,102,68,0.2);
+            transition: transform 0.1s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            transform-style: preserve-3d;
+        }
+
+        h1 {
+            font-family: 'Special Elite', cursive;
+            font-size: 3.8rem;
+            color: var(--text-heading);
+            letter-spacing: 6px;
+            margin-bottom: 12px;
+            text-shadow: 
+                0 0 15px rgba(156,102,68,0.5),
+                0 4px 5px rgba(0,0,0,0.8);
+            transition: all 0.6s ease;
+        }
+
+        .username {
+            color: #888;
+            font-size: 1.5rem;
+            font-family: 'VT323', monospace;
+            letter-spacing: 3px;
+        }
+
+        .bio {
+            font-size: 1.35rem;
+            max-width: 680px;
+            margin: 35px auto 0;
+            color: #a8a8a8;
+            font-style: italic;
+        }
+
+        nav {
+            display: flex;
+            justify-content: center;
+            gap: 18px;
+            flex-wrap: wrap;
+            margin: 50px 0 60px;
+        }
+
+        /* OPTİMİZASYON: backdrop-filter: blur kaldırıldı */
+        .nav-btn {
+            background: rgba(25, 25, 25, 0.95);
+            color: #ccc;
+            border: 2px solid rgba(156,102,68,0.4);
+            padding: 16px 32px;
+            font-family: 'VT323', monospace;
+            font-size: 1.3rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .nav-btn:hover {
+            background: rgba(156,102,68,0.2);
+            border-color: var(--accent);
+            color: #e8d5b8;
+            transform: translateY(-4px);
+            box-shadow: 0 10px 20px rgba(156,102,68,0.15);
+        }
+
+        section {
+            background: rgba(18,18,18,0.95);
+            border: 1px solid rgba(156,102,68,0.25);
+            padding: 50px 45px;
+            margin-bottom: 70px;
+            border-radius: 4px;
+            box-shadow: 0 15px 30px rgba(0,0,0,0.6);
+            position: relative;
+            overflow: hidden;
+        }
+
+        h2 {
+            font-family: 'Special Elite', cursive;
+            color: #c9a37f;
+            font-size: 2.1rem;
+            text-align: center;
+            margin-bottom: 35px;
+            letter-spacing: 3px;
+            position: relative;
+        }
+
+        h2::after {
+            content: '';
+            position: absolute;
+            bottom: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 2px;
+            background: linear-gradient(to right, transparent, var(--accent), transparent);
+        }
+
+        .about-text {
+            font-size: 1.35rem;
+            text-align: center;
+            color: #bbb;
+            max-width: 720px;
+            margin: 0 auto;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 28px;
+            margin-top: 40px;
+        }
+
+        /* OPTİMİZASYON: backdrop-filter: blur kaldırıldı */
+        .card {
+            background: rgba(22, 22, 22, 0.98);
+            border: 1px solid rgba(156,102,68,0.3);
+            padding: 28px;
+            transition: all 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-8px);
+            border-color: var(--accent);
+            box-shadow: 0 15px 30px rgba(156,102,68,0.15);
+        }
+
+        .card strong {
+            color: var(--text-heading);
+            font-size: 1.25rem;
+            display: block;
+            margin-bottom: 12px;
+        }
+
+        footer {
+            text-align: center;
+            padding: 70px 20px 40px;
+            color: #555;
+            font-size: 1.1rem;
+            font-family: 'VT323', monospace;
+        }
+
+        /* Performanslı CSS Sınıfları */
+        .effect-scratch {
+            position: fixed;
+            background: rgba(255,255,255,0.08);
+            opacity: 0;
+            z-index: 5;
+            pointer-events: none;
+            will-change: transform, opacity;
+        }
+
+        .effect-dust {
+            position: fixed;
+            width: 2px;
+            height: 2px;
+            background: rgba(200,180,140,0.5);
+            border-radius: 50%;
+            z-index: 4;
+            pointer-events: none;
+            will-change: transform;
+        }
+
+        @media (max-width: 768px) {
+            h1 { font-size: 2.8rem; }
+            .nav-btn { padding: 14px 24px; font-size: 1.15rem; }
+            section { padding: 40px 25px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>GORKEM</h1>
+            <div class="username">@gokems</div>
+            <p class="bio">tired but getting by • coding sometimes • playing games • listening to music</p>
+        </header>
+
+        <nav>
+            <button class="nav-btn" onclick="document.getElementById('about').scrollIntoView({behavior: 'smooth'})">ABOUT</button>
+            <button class="nav-btn" onclick="document.getElementById('gaming').scrollIntoView({behavior: 'smooth'})">GAMING</button>
+            <button class="nav-btn" onclick="document.getElementById('anime').scrollIntoView({behavior: 'smooth'})">ANIME</button>
+        </nav>
+
+        <section id="about">
+            <h2>A BIT ABOUT ME</h2>
+            <p class="about-text">
+                I learned English from games.<br>
+                Currently learning Python and C++, with a growing interest in AI engineering.<br><br>
+                Usually tired, sometimes in a good mood.<br>
+                Just chilling, taking it one day at a time.
+            </p>
+        </section>
+
+        <section id="gaming">
+            <h2>GAMING</h2>
+            <div class="grid">
+                <div class="card">
+                    <strong>Favorite Games</strong>
+                    Ultrakill • Subnautica
+                </div>
+                <div class="card">
+                    <strong>Preferred Style</strong>
+                    Fast-paced action<br>
+                    Not really into RPGs or slow adventures
+                </div>
+                <div class="card">
+                    <strong>Favorite Character</strong>
+                    Kakyoin (JoJo's Bizarre Adventure)
+                </div>
+            </div>
+        </section>
+
+        <section id="anime">
+            <h2>ANIME &amp; MANGA</h2>
+            <div class="grid">
+                <div class="card">
+                    <strong>Favorites</strong>
+                    Hunter x Hunter<br>
+                    JoJo's Bizarre Adventure
+                </div>
+                <div class="card">
+                    <strong>Other</strong>
+                    Reading manga from time to time
+                </div>
+            </div>
+        </section>
+
+        <footer>
+            <p>old tapes • fading memories • endless loading • gokems</p>
+        </footer>
+    </div>
+
+    <script>
+        /* * OPTİMİZASYON: OBJECT POOLING
+         * Sürekli element yaratıp silmek yerine, baştan belirli sayıda element yaratıp
+         * animasyon bittikçe onları tekrar kullanıyoruz. Bu bellek (RAM) şişmesini önler.
+         */
+        
+        // 1. Toz Partikülleri (Sadece 8 adet, geri dönüştürülüyor)
+        const dustCount = 8;
+        for (let i = 0; i < dustCount; i++) {
+            const dust = document.createElement('div');
+            dust.className = 'effect-dust';
+            document.body.appendChild(dust);
+            animateDust(dust, Math.random() * 5000); // İlk yüklenmede rastgele gecikme
+        }
+
+        function animateDust(dust, delay = 0) {
+            setTimeout(() => {
+                dust.style.left = Math.random() * 100 + 'vw';
+                dust.style.top = '-10px';
+                
+                const duration = Math.random() * 8000 + 10000;
+                
+                const anim = dust.animate([
+                    { transform: 'translateY(0)' },
+                    { transform: `translateY(${window.innerHeight + 50}px)` }
+                ], {
+                    duration: duration,
+                    easing: 'linear'
+                });
+
+                // Animasyon bitince elementi silmek yerine tekrar başa sar
+                anim.onfinish = () => animateDust(dust); 
+            }, delay);
+        }
+
+        // 2. Çizik Efektleri (Sadece 2 adet, geri dönüştürülüyor)
+        const scratchCount = 2;
+        for (let i = 0; i < scratchCount; i++) {
+            const scratch = document.createElement('div');
+            scratch.className = 'effect-scratch';
+            document.body.appendChild(scratch);
+            animateScratch(scratch, Math.random() * 3000);
+        }
+
+        function animateScratch(scratch, delay = 0) {
+            setTimeout(() => {
+                scratch.style.height = (Math.random() * 2 + 1) + 'px';
+                scratch.style.left = Math.random() * 100 + 'vw';
+                scratch.style.top = Math.random() * 100 + 'vh';
+                scratch.style.width = (Math.random() * 150 + 50) + 'px';
+                
+                const startRotate = Math.random() * 30 - 15;
+                const endRotate = startRotate + (Math.random() * 10 - 5);
+                const translateX = Math.random() * 60 + 20;
+
+                const anim = scratch.animate([
+                    { opacity: 0, transform: `translateX(0) rotate(${startRotate}deg)` },
+                    { opacity: 0.8, offset: 0.1 },
+                    { opacity: 0, transform: `translateX(${translateX}px) rotate(${endRotate}deg)` }
+                ], {
+                    duration: 600,
+                    easing: 'ease-out'
+                });
+
+                // Rastgele bir süre bekle ve tekrarla (3 ila 8 saniye arası)
+                anim.onfinish = () => animateScratch(scratch, Math.random() * 5000 + 3000);
+            }, delay);
+        }
+
+        // Header tilt efekti (Performanslı haliyle korundu)
+        const header = document.querySelector('header');
+        let isTicking = false;
+
+        header.addEventListener('mousemove', (e) => {
+            if (!isTicking) {
+                requestAnimationFrame(() => {
+                    const rect = header.getBoundingClientRect();
+                    const x = (e.clientX - rect.left) / rect.width - 0.5;
+                    const y = (e.clientY - rect.top) / rect.height - 0.5;
+                    header.style.transform = `perspective(800px) rotateX(${y * -10}deg) rotateY(${x * 15}deg)`;
+                    isTicking = false;
+                });
+                isTicking = true;
+            }
+        });
+
+        header.addEventListener('mouseleave', () => {
+            header.style.transform = 'perspective(800px) rotateX(0) rotateY(0)';
+        });
+
+        console.log('%cNo more lag. Welcome, tired wanderer...', 'color:#c9a37f; font-family:monospace; font-size:14px');
+    </script>
+</body>
+</html>

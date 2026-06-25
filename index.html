@@ -39,9 +39,7 @@
             min-height: 100vh;
         }
 
-        /* OPTİMİZASYON: Hareket eden devasa gradyanlar yerine 
-         hafifçe yanıp sönen (flicker) statik bir film katmanı 
-         */
+        /* Film grain & vignette effect */
         body::before {
             content: '';
             position: fixed;
@@ -60,9 +58,7 @@
             100% { opacity: 0.8; }
         }
 
-        /* OPTİMİZASYON: Hareketli çizgiler çok yorar. 
-         Bunun yerine statik tarama çizgileri bırakıldı. 
-         */
+        /* CRT scanlines */
         body::after {
             content: '';
             position: fixed;
@@ -129,7 +125,6 @@
             margin: 50px 0 60px;
         }
 
-        /* OPTİMİZASYON: backdrop-filter: blur kaldırıldı */
         .nav-btn {
             background: rgba(25, 25, 25, 0.95);
             color: #ccc;
@@ -198,7 +193,6 @@
             margin-top: 40px;
         }
 
-        /* OPTİMİZASYON: backdrop-filter: blur kaldırıldı */
         .card {
             background: rgba(22, 22, 22, 0.98);
             border: 1px solid rgba(156,102,68,0.3);
@@ -227,7 +221,7 @@
             font-family: 'VT323', monospace;
         }
 
-        /* Performanslı CSS Sınıfları */
+        /* Ambient effects classes */
         .effect-scratch {
             position: fixed;
             background: rgba(255,255,255,0.08);
@@ -276,8 +270,8 @@
                 Currently learning Python and C++, with a growing interest in AI engineering.<br><br>
                 Usually tired, sometimes in a good mood.<br>
                 Just chilling, taking it one day at a time.<br>
-                İ like listen Tame İmapala and The Caretaker.<br>
-                Fav musics are "Let it happen" and "My heart stop in joy".<br>
+                I like listening to Tame Impala and The Caretaker.<br>
+                My favorite songs are "Let It Happen" and "My heart stop in joy".<br>
             </p>
         </section>
 
@@ -321,18 +315,13 @@
     </div>
 
     <script>
-        /* OPTİMİZASYON: OBJECT POOLING
-         Sürekli element yaratıp silmek yerine, baştan belirli sayıda element yaratıp
-         animasyon bittikçe onları tekrar kullanıyoruz. Bu bellek (RAM) şişmesini önler.
-         */
-        
-        // 1. Toz Partikülleri (Sadece 8 adet, geri dönüştürülüyor)
+        // Ambient dust particles setup
         const dustCount = 8;
         for (let i = 0; i < dustCount; i++) {
             const dust = document.createElement('div');
             dust.className = 'effect-dust';
             document.body.appendChild(dust);
-            animateDust(dust, Math.random() * 5000); // İlk yüklenmede rastgele gecikme
+            animateDust(dust, Math.random() * 5000);
         }
 
         function animateDust(dust, delay = 0) {
@@ -350,12 +339,11 @@
                     easing: 'linear'
                 });
 
-                // Animasyon bitince elementi silmek yerine tekrar başa sar
                 anim.onfinish = () => animateDust(dust); 
             }, delay);
         }
 
-        // 2. Çizik Efektleri (Sadece 2 adet, geri dönüştürülüyor)
+        // Retro film scratches setup
         const scratchCount = 2;
         for (let i = 0; i < scratchCount; i++) {
             const scratch = document.createElement('div');
@@ -384,12 +372,11 @@
                     easing: 'ease-out'
                 });
 
-                // Rastgele bir süre bekle ve tekrarla (3 ila 8 saniye arası)
                 anim.onfinish = () => animateScratch(scratch, Math.random() * 5000 + 3000);
             }, delay);
         }
 
-        // Header tilt efekti (Performanslı haliyle korundu)
+        // Interactive header mouse parallax
         const header = document.querySelector('header');
         let isTicking = false;
 
@@ -410,7 +397,7 @@
             header.style.transform = 'perspective(800px) rotateX(0) rotateY(0)';
         });
 
-        console.log('%cNo more lag. Welcome, tired wanderer...', 'color:#c9a37f; font-family:monospace; font-size:14px');
+        console.log('%cWelcome, tired wanderer...', 'color:#c9a37f; font-family:monospace; font-size:14px');
     </script>
 </body>
 </html>

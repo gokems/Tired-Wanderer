@@ -39,8 +39,8 @@
             min-height: 100vh;
         }
 
-        /* * OPTİMİZASYON: Hareket eden devasa gradyanlar yerine 
-         * hafifçe yanıp sönen (flicker) statik bir film katmanı 
+        /* OPTİMİZASYON: Hareket eden devasa gradyanlar yerine 
+         hafifçe yanıp sönen (flicker) statik bir film katmanı 
          */
         body::before {
             content: '';
@@ -60,8 +60,8 @@
             100% { opacity: 0.8; }
         }
 
-        /* * OPTİMİZASYON: Hareketli çizgiler çok yorar. 
-         * Bunun yerine statik tarama çizgileri bırakıldı. 
+        /* OPTİMİZASYON: Hareketli çizgiler çok yorar. 
+         Bunun yerine statik tarama çizgileri bırakıldı. 
          */
         body::after {
             content: '';
@@ -321,9 +321,9 @@
     </div>
 
     <script>
-        /* * OPTİMİZASYON: OBJECT POOLING
-         * Sürekli element yaratıp silmek yerine, baştan belirli sayıda element yaratıp
-         * animasyon bittikçe onları tekrar kullanıyoruz. Bu bellek (RAM) şişmesini önler.
+        /* OPTİMİZASYON: OBJECT POOLING
+         Sürekli element yaratıp silmek yerine, baştan belirli sayıda element yaratıp
+         animasyon bittikçe onları tekrar kullanıyoruz. Bu bellek (RAM) şişmesini önler.
          */
         
         // 1. Toz Partikülleri (Sadece 8 adet, geri dönüştürülüyor)
